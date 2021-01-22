@@ -6,16 +6,17 @@
 
 int main() {
 	char* printThis = "Hello World";
+	int rc = fork();
 	for (int i=0; i<strlen(printThis); i++) {
-		int rc = fork();
 		if (rc == 0) {
 			printf("%c %d\n", *(printThis + i), getpid());
 			sleep(rand()%4 + 1);
-			exit(1);
+			rc = fork();
+			if (rc == 0)
+				continue;
 		} 
-		else {
+		else
 			wait(NULL);
-		}
 	}
 	return 0;
 }
